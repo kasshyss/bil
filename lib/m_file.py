@@ -1,4 +1,3 @@
-#-*- coding: utf-8 -*-
 """
 * Purpose : manage file interaction
 * Author : Meriadoc
@@ -85,10 +84,10 @@ def df_to_csv(path, file_name, df):
     try:
         if os.path.exists(full_path):
             logger.info('Overide current file')
-        df.to_csv(full_path , index = False, sep = ';')
+        df.to_csv(full_path , sep = ';', encoding='utf-8')
     except ValueError as e:
-        logger.error('Unable to read file {}'.format(full_path))
-        logger.error(''.format(e), exec_info = True)
+        logger.error('Unable to write file {}'.format(full_path))
+        logger.error(e, exc_info = True)
         return False
     else:
         logger.info('File {} loaded in dataframe'.format(file_name))
@@ -127,7 +126,7 @@ def append_df_to_csv(path, file_name, df):
     try:
         if os.path.exists(full_path):
             logger.info('Overide current file')
-        df.to_csv(full_path , index = False, sep = ';', header = False, mode = 'a')
+        df.to_csv(full_path , index = False, sep = ';', header = False, mode = 'a', encoding='utf-8')
     except ValueError as e:
         logger.error('Unable to read file {}'.format(full_path))
         logger.error(''.format(e), exec_info = True)
