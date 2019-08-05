@@ -10,7 +10,7 @@ import m_logger as log
 import pandas as pd
 import os
 
-logger = log.get_logger('file', log.get_logger_level('debug'))
+logger = log.get_logger('file', log.get_logger_level('info'))
 
 
 """
