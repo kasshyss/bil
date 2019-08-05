@@ -11,7 +11,7 @@
 import lib.m_logger as log
 from bs4 import BeautifulSoup
 
-logger = log.get_logger('html_parser',log.get_logger_level('debug'))
+logger = log.get_logger('html_parser',log.get_logger_level('info'))
 
 """
 Purpose : parse code nace web page from guicher lu
