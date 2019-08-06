@@ -82,7 +82,7 @@ while run:
         'code_nace_desc' : nace_data['code_nace_desc']
         }, ignore_index = True)
     id = id + 1
-    t.sleep(2)
+    t.sleep(0.5)
 print(nace_df)
 logger.info('all ids checked')
 s = f.df_to_csv(local_path + '/'  + result, file_name, nace_df)

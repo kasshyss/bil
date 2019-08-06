@@ -10,7 +10,7 @@
 import urllib2
 import m_logger as log
 
-logger = log.get_logger('request', log.get_logger_level('info'))
+logger = log.get_logger('request', log.get_logger_level('warning'))
 
 
 """
