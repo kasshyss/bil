@@ -14,3 +14,4 @@ How to run script:
 
 Note
 * Save result every 10 records
+* add a folder result and a folder save in your project
