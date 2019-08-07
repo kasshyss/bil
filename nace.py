@@ -43,6 +43,7 @@ if os.path.exists(local_path +'/'+ result  + '/' + file_name):
     # back up df
     bckp_name = 'backup_' + str(datetime.now().strftime('%Y%m%d_%H%M%S'))+ '_'  + file_name
     s = f.df_to_csv(local_path + '/'  + backup , bckp_name, nace_df)
+    logger.info('Backup current file as {}'.format(bckp_name))
     if s == False:
         logger.error('Fail to save backup file')
         logger.error('Initialisation fail')
@@ -53,6 +54,7 @@ if os.path.exists(local_path +'/'+ result  + '/' + file_name):
         id = 1
     else:
         id = int(nace_df['id'].max()) + 1
+    logger.info('Start at id {}'.format(id))
 else:
 
     logger.info('New run from strach')
