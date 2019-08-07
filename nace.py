@@ -6,6 +6,7 @@
 * Author : Meriadoc
 * Log :
     * 05/08/2019 : PB : Initial Commit
+    * 07/08/2019 : PB : Push value into conf file
 """
 
 import lib.m_logger as log
@@ -27,6 +28,7 @@ local_path = os.path.dirname(os.path.abspath(__file__))
 local_path = str(local_path)
 web_target = str(conf.get_section_conf('scrapping.ini', local_path + '/conf', 'WEB_TARGET')['guichet_lu'])
 output_conf = conf.get_section_conf('scrapping.ini', local_path + '/conf', 'OUTPUT')
+sleep_time = float(conf.get_section_conf('scrapping.ini', local_path + '/conf', 'SCRIPT')['sleep'])
 result = str(output_conf['result'])  
 file_name =  str(output_conf['file_name'])
 backup = str(output_conf['backup'])
@@ -82,7 +84,7 @@ while run:
         'code_nace_desc' : nace_data['code_nace_desc']
         }, ignore_index = True)
     id = id + 1
-    t.sleep(0.5)
+    t.sleep(sleep_time)
 print(nace_df)
 logger.info('all ids checked')
 s = f.df_to_csv(local_path + '/'  + result, file_name, nace_df)
@@ -91,3 +93,4 @@ if s == False:
     sys.exit(-1)
 
 logger.info('script end')
+sys.exit(1)
