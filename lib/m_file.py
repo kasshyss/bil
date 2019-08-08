@@ -4,6 +4,7 @@
 * Log :
     * 05/08/2019 : Initial commit
     * 08/08/2019 : Update append fct : remove index = false
+    * 08/08/2019 : update with error_bad_lines in fct csv to df
 """
 
 import m_logger as log
@@ -43,10 +44,10 @@ def csv_to_df(path, file_name):
     
     logger.debug('Open file {}'.format(full_path))
     try:
-        df = pd.read_csv(full_path , index_col = False, sep = ';')
+        df = pd.read_csv(full_path , index_col = False, sep = ';', error_bad_lines = False)
     except ValueError as e:
         logger.error('Unable to read file {}'.format(full_path))
-        logger.error(''.format(e), exec_info = True)
+        logger.error(''.format(e), exc_info = True)
         return False
     else:
         logger.info('File {} loaded in dataframe'.format(file_name))

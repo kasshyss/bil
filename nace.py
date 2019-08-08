@@ -8,6 +8,7 @@
     * 05/08/2019 : Initial Commit
     * 07/08/2019 : Push value into conf file
     * 08/08/2019 : Append data insead of override in result file
+    * 08/08/2019 : Add keyboard interrupt management
 """
 
 import lib.m_logger as log
@@ -34,7 +35,8 @@ result = str(output_conf['result'])
 file_name =  str(output_conf['file_name'])
 backup = str(output_conf['backup'])
 nace_col = conf.get_section_conf('scrapping.ini', local_path + '/conf', 'NACE')['col'].split(',')
-new_run = True
+# TODO Exit codes
+
 id = 1
 
 logger.info('Check if {} already exist'.format(output_conf['file_name']))
@@ -50,7 +52,6 @@ if os.path.exists(local_path +'/'+ result  + '/' + file_name):
         logger.error('Initialisation fail')
         sys.exit(-1)
     #set up flags
-    new_run = False
     if nace_df.empty:
         id = 1
     else:
@@ -68,29 +69,39 @@ else:
 logger.info('Start parsing')
 run = True
 while run:
-    nace_data = {} 
-    if id % 10 == 0:
-        logger.info('Status current run : {} ids checked'.format(id))
+    try:
+        nace_data = {} 
+        if id % 10 == 0:
+            logger.info('Status current run : {} ids checked'.format(id))
+            s = f.append_df_to_csv(local_path + '/'  + result, file_name, nace_df)
+            nace_df = pd.DataFrame(columns = nace_col)
+
+            if s == False:
+                logger.error('Run fail at id {}'.format(id))
+                sys.exit(-1)
+        html = request.request_html(web_target + str(id))
+        if html == False:
+            run = False
+        nace_data = parse.code_nace(html)
+        nace_df = nace_df.append({ 
+            'id' : id, 
+            'compagny_name' : nace_data['compagny_name'],
+            'address' : nace_data['address'],
+            'code_nace': nace_data['code_nace'],
+            'code_nace_desc' : nace_data['code_nace_desc']
+            }, ignore_index = True)
+        id = id + 1
+        t.sleep(sleep_time)
+    except KeyboardInterrupt:
+        logger.warning('Script ended by user')
         s = f.append_df_to_csv(local_path + '/'  + result, file_name, nace_df)
-        nace_df = pd.DataFrame(columns = nace_col)
 
         if s == False:
-            logger.error('Run fail at id {}'.format(id))
+            logger.error('Fail to save dataframe at script closing')
             sys.exit(-1)
-    html = request.request_html(web_target + str(id))
-    if html == False:
-        run = False
-    nace_data = parse.code_nace(html)
-    nace_df = nace_df.append({ 
-        'id' : id, 
-        'compagny_name' : nace_data['compagny_name'],
-        'address' : nace_data['address'],
-        'code_nace': nace_data['code_nace'],
-        'code_nace_desc' : nace_data['code_nace_desc']
-        }, ignore_index = True)
-    id = id + 1
-    t.sleep(sleep_time)
-print(nace_df)
+        logger.info('Script end')
+        sys.exit(0)
+
 logger.info('all ids checked')
 s = f.df_to_csv(local_path + '/'  + result, file_name, nace_df)
 if s == False:
