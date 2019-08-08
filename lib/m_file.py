@@ -3,6 +3,7 @@
 * Author : Meriadoc
 * Log :
     * 05/08/2019 : Initial commit
+    * 08/08/2019 : Update append fct : remove index = false
 """
 
 import m_logger as log
@@ -126,7 +127,7 @@ def append_df_to_csv(path, file_name, df):
     try:
         if os.path.exists(full_path):
             logger.info('Overide current file')
-        df.to_csv(full_path , index = False, sep = ';', header = False, mode = 'a', encoding='utf-8')
+        df.to_csv(full_path , sep = ';', header = False, mode = 'a', encoding='utf-8')
     except ValueError as e:
         logger.error('Unable to read file {}'.format(full_path))
         logger.error(''.format(e), exec_info = True)
