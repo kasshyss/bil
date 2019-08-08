@@ -5,8 +5,9 @@
 * Purpose : parse gichet lu nace web page
 * Author : Meriadoc
 * Log :
-    * 05/08/2019 : PB : Initial Commit
-    * 07/08/2019 : PB : Push value into conf file
+    * 05/08/2019 : Initial Commit
+    * 07/08/2019 : Push value into conf file
+    * 08/08/2019 : Append data insead of override in result file
 """
 
 import lib.m_logger as log
@@ -70,7 +71,9 @@ while run:
     nace_data = {} 
     if id % 10 == 0:
         logger.info('Status current run : {} ids checked'.format(id))
-        s = f.df_to_csv(local_path + '/'  + result, file_name, nace_df)
+        s = f.append_df_to_csv(local_path + '/'  + result, file_name, nace_df)
+        nace_df = pd.DataFrame(columns = nace_col)
+
         if s == False:
             logger.error('Run fail at id {}'.format(id))
             sys.exit(-1)
