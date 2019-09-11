@@ -43,6 +43,7 @@ logger.info('Check if {} already exist'.format(output_conf['file_name']))
 if os.path.exists(local_path +'/'+ result  + '/' + file_name):
     # get df
     nace_df = f.csv_to_df(local_path + '/'  + result, file_name)
+    nace_df = nace_df.drop_duplicates(keep = 'first')
     # back up df
     bckp_name = 'backup_' + str(datetime.now().strftime('%Y%m%d_%H%M%S'))+ '_'  + file_name
     s = f.df_to_csv(local_path + '/'  + backup , bckp_name, nace_df)
@@ -56,7 +57,9 @@ if os.path.exists(local_path +'/'+ result  + '/' + file_name):
         id = 1
     else:
         id = int(nace_df['id'].max()) + 1
+    nace_df = pd.DataFrame(columns = nace_col)
     logger.info('Start at id {}'.format(id))
+
 else:
 
     logger.info('New run from strach')
@@ -103,7 +106,7 @@ while run:
         sys.exit(0)
 
 logger.info('all ids checked')
-s = f.df_to_csv(local_path + '/'  + result, file_name, nace_df)
+s = f.append_df_to_csv(local_path + '/'  + result, file_name, nace_df)
 if s == False:
     logger.error('Run fail at id {}'.format(id-1))
     sys.exit(-1)

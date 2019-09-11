@@ -5,6 +5,7 @@
     * 05/08/2019 : Initial commit
     * 08/08/2019 : Update append fct : remove index = false
     * 08/08/2019 : update with error_bad_lines in fct csv to df
+    * 11/09/2019 : Add df cleaner
 """
 
 import m_logger as log
@@ -136,3 +137,15 @@ def append_df_to_csv(path, file_name, df):
     else:
         logger.info('File {} loaded in dataframe'.format(file_name))
         return True
+
+"""
+* Purpose : clean dataframe eg drop duplicate
+* In :
+        * pandas dataframe
+* Out
+        * pandas dataframe
+"""
+def df_cleaner(df):
+
+
+    return df.drop_duplicates()
